@@ -12,11 +12,10 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import SortableItem from '@/components/SortableItem';
-import { StopsContext } from '@/misc/stopsContext';
-import { useContext } from 'react';
+import { useRouteContext } from '@/providers/routeContext';
 
 const StopsList = () => {
-  const { stops, setStops } = useContext(StopsContext);
+  const { stops, setStops } = useRouteContext();
   const sensors = useSensors(useSensor(PointerSensor));
 
   function handleDragEnd(event: DragEndEvent) {

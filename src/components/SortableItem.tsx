@@ -3,8 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { CircleDot, EllipsisVertical, Flag, Grip, X } from 'lucide-react';
 import { Autocomplete } from './Autocomplete';
 import { Button } from './ui/button';
-import { useContext } from 'react';
-import { StopsContext } from '@/misc/stopsContext';
+import { useRouteContext } from '@/providers/routeContext';
 import { RouteStop } from '@/hooks/useRoute';
 
 interface SortableItemProps {
@@ -13,7 +12,7 @@ interface SortableItemProps {
 }
 
 const SortableItem: React.FC<SortableItemProps> = ({ stop, index }) => {
-  const { stops, updateStop, removeStop } = useContext(StopsContext);
+  const { stops, updateStop, removeStop } = useRouteContext();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: stop.id });
 
@@ -34,7 +33,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ stop, index }) => {
         <Grip
           {...listeners}
           {...attributes}
-          className="size-5 cursor-grab text-gray-400 hidden group-hover:block"
+          className="size-5 cursor-grab text-stone-500 hidden group-hover:block"
         />
         {index < stops.length - 1 && (
           <EllipsisVertical className="absolute left-1 top-full size-2.5" />
@@ -48,7 +47,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ stop, index }) => {
           }}
           placeholder="Type or select a location"
           initialQuery={stop.label}
-          className="bg-black/10 placeholder:text-gray-300"
+          className="shadow-sm pr-10"
         />
         {stops.length > 2 && index !== 0 && (
           <Button

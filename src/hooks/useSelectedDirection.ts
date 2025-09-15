@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
-import MapView from '@arcgis/core/views/MapView';
-import Graphic from '@arcgis/core/Graphic';
 import { RouteResult } from '@/hooks/useRoute';
+import { createDirectionGraphic } from '@/misc/createDirectionGraphic';
+import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
+import Graphic from '@arcgis/core/Graphic';
+import MapView from '@arcgis/core/views/MapView';
+import { useEffect, useState } from 'react';
 
 /**
  * Hook to manage the selection of a direction steps in a route.
@@ -21,10 +22,16 @@ export const useSelectedDirection = (
   useEffect(() => setSelectedDirectionIndex(null), [routeResult]);
 
   const onSelectDirection = (index: number, direction: Graphic) => {
+    if (!view) {
+      return;
+    }
+
+    view.graphics.removeAll();
+
     if (selectedDirectionIndex === index) {
       setSelectedDirectionIndex(null);
 
-      if (routeResult && routeResult.geometry && view) {
+      if (routeResult?.geometry) {
         view.goTo({
           target: routeResult.geometry,
         });
@@ -32,8 +39,7 @@ export const useSelectedDirection = (
       return;
     }
 
-    if (direction.geometry && view) {
-      // TODO: refactor not using depr methods
+    if (direction.geometry) {
       const bufferGeometry = geometryEngine.geodesicBuffer(
         direction.geometry,
         50,
@@ -43,6 +49,8 @@ export const useSelectedDirection = (
       view.goTo({
         target: bufferGeometry,
       });
+
+      view.graphics.add(createDirectionGraphic(direction.geometry));
       setSelectedDirectionIndex(index);
     }
   };

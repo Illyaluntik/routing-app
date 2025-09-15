@@ -1,3 +1,4 @@
+import { DEFAULT_BASEMAP } from '@/config/basemaps';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
@@ -15,7 +16,7 @@ export const useMap = () => {
     }
 
     const map = new Map({
-      basemap: 'streets-vector',
+      basemap: DEFAULT_BASEMAP.id,
     });
 
     const viewInstance = new MapView({
@@ -23,6 +24,9 @@ export const useMap = () => {
       map,
       center: [-98, 39],
       zoom: 4,
+      constraints: {
+        minZoom: 2,
+      },
       ui: {
         components: [],
       },

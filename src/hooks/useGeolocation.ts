@@ -1,15 +1,11 @@
+import { UserPosition } from '@/providers/userPositionContext';
 import { useState, useEffect } from 'react';
 
-interface Position {
-  latitude: number;
-  longitude: number;
-}
-
 export const useGeolocation = () => {
-  const [position, setPosition] = useState<Position | null>(null);
+  const [position, setPosition] = useState<UserPosition | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  const requestLocation = () => {
     if (!navigator.geolocation) {
       setError('Geolocation is not supported.');
       return;
@@ -27,7 +23,11 @@ export const useGeolocation = () => {
     };
 
     navigator.geolocation.getCurrentPosition(success, fail);
+  };
+
+  useEffect(() => {
+    requestLocation();
   }, []);
 
-  return { position, error };
+  return { position, setPosition, error, requestLocation };
 };
