@@ -4,7 +4,7 @@ import { WalkingPerson } from '@/components/icons/WalkingPerson';
 import { LocateWidget } from '@/components/LocateWidget';
 import { ManeuverIcon } from '@/components/ManeuverIcon';
 import { MapPopup } from '@/components/MapPopup';
-import { MaximizeRouteWidget } from '@/components/MaximizeRouteWidget';
+import { RouteDetailToggleWidget } from '@/components/RouteDetailToggleWidget';
 import StopsList from '@/components/StopsList';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,14 +32,7 @@ import * as locator from '@arcgis/core/rest/locator.js';
 import TravelMode from '@arcgis/core/rest/support/TravelMode';
 import MapView from '@arcgis/core/views/MapView';
 import cn from 'classnames';
-import {
-  Car,
-  ChevronDown,
-  Minimize2,
-  TriangleAlert,
-  Truck,
-  X,
-} from 'lucide-react';
+import { Car, ChevronDown, TriangleAlert, Truck, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -106,10 +99,6 @@ function App() {
       }),
       content: container,
     });
-  };
-
-  const minimizeRoute = () => {
-    setRouteMinimized(true);
   };
 
   useEffect(() => {
@@ -222,7 +211,9 @@ function App() {
           </div>
 
           {((isMobile && !isMapPopupOpen) || !isMobile) && routeMinimized && (
-            <MaximizeRouteWidget
+            <RouteDetailToggleWidget
+              routeResult={routeResult}
+              routeMinimized={routeMinimized}
               setRouteMinimized={setRouteMinimized}
               className="absolute bottom-5 right-5 z-50"
             />
@@ -234,14 +225,12 @@ function App() {
                 <div className="bg-white/70 rounded-md shadow-md">
                   <div className="backdrop-blur-sm p-2.5 !rounded-md relative max-h-[calc(100dvh-106px)] lg:max-h-[calc(100vh-40px)] h-full flex flex-col">
                     {isMobile && (
-                      <Button
+                      <RouteDetailToggleWidget
+                        routeResult={routeResult}
+                        routeMinimized={routeMinimized}
+                        setRouteMinimized={setRouteMinimized}
                         className="absolute top-0 right-9 cursor-pointer z-50"
-                        size="icon"
-                        variant="ghost"
-                        onClick={minimizeRoute}
-                      >
-                        <Minimize2 />
-                      </Button>
+                      />
                     )}
                     <Button
                       className="absolute top-0 right-0 cursor-pointer z-50"
@@ -299,7 +288,7 @@ function App() {
                           </span>
                           -
                           <span className="text-sm">
-                            {routeResult.summary.totalLength.toFixed(2)} mi
+                            {routeResult.summary.totalLengthFormatted}
                           </span>
                         </div>
                         <Collapsible className="flex flex-col overflow-hidden">

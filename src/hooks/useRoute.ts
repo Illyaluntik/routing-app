@@ -20,6 +20,7 @@ export interface RouteResult {
     totalLength: number;
     totalTime: number;
     totalTimeFormatted: string;
+    totalLengthFormatted: string;
   };
   directions: Graphic[];
 }
@@ -208,6 +209,9 @@ export const useRoute = (
                     timeAttribute % 60
                   )?.toFixed(0)} mins`
                 : `${timeAttribute?.toFixed(0)} mins`,
+            totalLengthFormatted: `${r.route.attributes.Total_Miles.toFixed(
+              2
+            )} mi`,
           },
           directions: r.directions?.features.slice(1, -1) || [],
         });
