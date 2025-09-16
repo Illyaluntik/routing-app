@@ -12,9 +12,12 @@ interface Props {
 }
 export const LocateWidget: React.FC<Props> = ({ className }) => {
   const view = useMapView();
-  const { position, requestLocation } = useGeolocation();
+  const { position, requestLocation } = useGeolocation(view);
 
-  const zoomToUserPosition = (location: UserPosition) => {
+  const zoomToUserPosition = (
+    location: UserPosition,
+    animationDuration = 2500
+  ) => {
     view.goTo(
       {
         target: new Point({
@@ -24,7 +27,7 @@ export const LocateWidget: React.FC<Props> = ({ className }) => {
         zoom: 18,
       },
       {
-        duration: 2500,
+        duration: animationDuration,
       }
     );
   };
@@ -35,7 +38,7 @@ export const LocateWidget: React.FC<Props> = ({ className }) => {
     }
 
     view.when(() => {
-      zoomToUserPosition(position);
+      zoomToUserPosition(position, 0);
     });
   }, [position, view]);
 
