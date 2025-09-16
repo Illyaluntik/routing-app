@@ -47,12 +47,13 @@ export const BasemapWidget: React.FC<Props> = ({ className }) => {
         <Button
           variant="ghost"
           className={cn('cursor-pointer w-10 h-10', isOpen && 'bg-accent')}
+          onClick={() => setIsOpen(!isOpen)}
         >
           <Layers />
         </Button>
         <div
           className={cn(
-            'absolute top-0 left-full ml-2 bg-white shadow-lg rounded-md flex gap-2 p-2 z-50 transition-all ease-out',
+            'absolute top-0 left-full ml-2 bg-white shadow-lg rounded-md flex gap-2 p-2 z-50 transition-all max-w-[calc(100vw-76px)] overflow-hidden',
             isOpen
               ? 'opacity-100 translate-x-0'
               : 'opacity-0 -translate-x-2 pointer-events-none'

@@ -2,9 +2,9 @@ import { useRef, useState } from 'react';
 import axios from 'axios';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import cn from 'classnames';
 import { useEffect } from 'react';
 import { useUserPosition } from '@/providers/userPositionContext';
+import { cn } from '@/lib/utils';
 
 interface Suggestion {
   label: string;
@@ -17,6 +17,7 @@ interface Props {
   onInputChange?: (value: string) => void;
   initialQuery?: string;
   className?: string;
+  suggestionsListClassName?: string;
 }
 
 export const Autocomplete: React.FC<Props> = ({
@@ -25,6 +26,7 @@ export const Autocomplete: React.FC<Props> = ({
   onInputChange,
   initialQuery = '',
   className,
+  suggestionsListClassName,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -167,7 +169,12 @@ export const Autocomplete: React.FC<Props> = ({
         className={cn('bg-white', className)}
       />
       {suggestions.length > 0 && isFocused && (
-        <div className="absolute z-50 w-full top-10">
+        <div
+          className={cn(
+            'absolute z-50 w-full',
+            suggestionsListClassName
+          )}
+        >
           <ScrollArea className="w-full bg-white text-black shadow-md rounded-md mt-1">
             <ul>
               {suggestions.map((s, i) => (

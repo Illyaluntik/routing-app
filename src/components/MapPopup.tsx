@@ -34,7 +34,7 @@ export const MapPopup: React.FC<Props> = ({
     >
       <X />
     </Button>
-    <div className="mb-1 text-xl font-semibold">{label}</div>
+    <div className="mb-1 text-xl font-semibold pr-5">{label}</div>
     <div className="text-xs text-gray-400 mb-5">
       {coords[1].toFixed(5)}, {coords[0].toFixed(5)}
     </div>

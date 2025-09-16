@@ -21,7 +21,11 @@
 
 .esri-popup,
 .esri-popup__main-container {
-  @apply !rounded-md;
+  @apply rounded-t-md sm:rounded-md;
+}
+
+.esri-view-surface:focus::after {
+  @apply !outline-none;
 }
 
 @custom-variant dark (&:is(.dark *));

@@ -48,6 +48,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ stop, index }) => {
           placeholder="Type or select a location"
           initialQuery={stop.label}
           className="shadow-sm pr-10"
+          suggestionsListClassName="bottom-10 lg:bottom-auto"
         />
         {stops.length > 2 && index !== 0 && (
           <Button
