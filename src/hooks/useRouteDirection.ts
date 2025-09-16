@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
  * @param view
  * @param routeResult
  */
-export const useSelectedDirection = (
+export const useRouteDirection = (
   view: MapView | null,
   routeResult: RouteResult | null
 ) => {
@@ -19,14 +19,30 @@ export const useSelectedDirection = (
     number | null
   >(null);
 
-  useEffect(() => setSelectedDirectionIndex(null), [routeResult]);
+  useEffect(() => {
+    setSelectedDirectionIndex(null);
+    removeDirectionHighlight();
+  }, [routeResult]);
+
+  const removeDirectionHighlight = () => {
+    if (!view) {
+      return;
+    }
+
+    const graphic = view.graphics.find(
+      (g) => g.attributes.id === 'route-direction'
+    );
+    if (graphic) {
+      view.graphics.remove(graphic);
+    }
+  };
 
   const onSelectDirection = (index: number, direction: Graphic) => {
     if (!view) {
       return;
     }
 
-    view.graphics.removeAll();
+    removeDirectionHighlight();
 
     if (selectedDirectionIndex === index) {
       setSelectedDirectionIndex(null);

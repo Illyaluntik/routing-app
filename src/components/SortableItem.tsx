@@ -1,8 +1,8 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CircleDot, EllipsisVertical, Flag, Grip, X } from 'lucide-react';
-import { Autocomplete } from './Autocomplete';
-import { Button } from './ui/button';
+import { Autocomplete } from '@/components/Autocomplete';
+import { Button } from '@/components/ui/button';
 import { useRouteContext } from '@/providers/routeContext';
 import { RouteStop } from '@/hooks/useRoute';
 

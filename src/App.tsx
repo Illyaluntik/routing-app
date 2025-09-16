@@ -1,10 +1,37 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Autocomplete } from './components/Autocomplete';
-import { Button } from './components/ui/button';
+import { Autocomplete } from '@/components/Autocomplete';
+import { BasemapWidget } from '@/components/BasemapWidget';
+import { WalkingPerson } from '@/components/icons/WalkingPerson';
+import { LocateWidget } from '@/components/LocateWidget';
+import { ManeuverIcon } from '@/components/ManeuverIcon';
+import { MapPopup } from '@/components/MapPopup';
+import { MaximizeRouteWidget } from '@/components/MaximizeRouteWidget';
+import StopsList from '@/components/StopsList';
+import { Button } from '@/components/ui/button';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ZoomWidget } from '@/components/ZoomWidget';
+import { useGeolocation } from '@/hooks/useGeolocation';
+import { useMap } from '@/hooks/useMap';
 import { MAX_STOPS, useRoute } from '@/hooks/useRoute';
-import { ManeuverIcon } from './components/ManeuverIcon';
-import StopsList from './components/StopsList';
-import { RouteContext } from './providers/routeContext';
+import { useRouteDirection } from '@/hooks/useRouteDirection';
+import { useStopMarkers } from '@/hooks/useStopMarkers';
+import { createPointGraphic } from '@/misc/createPointGraphic';
+import { MapViewContext } from '@/providers/mapViewContext';
+import { RouteContext } from '@/providers/routeContext';
+import {
+  UserPositionContext,
+  UserPositionContextValue,
+} from '@/providers/userPositionContext';
+import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
+import Point from '@arcgis/core/geometry/Point';
+import * as locator from '@arcgis/core/rest/locator.js';
+import TravelMode from '@arcgis/core/rest/support/TravelMode';
+import MapView from '@arcgis/core/views/MapView';
+import cn from 'classnames';
 import {
   Car,
   ChevronDown,
@@ -13,35 +40,8 @@ import {
   Truck,
   X,
 } from 'lucide-react';
-import cn from 'classnames';
+import { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import Point from '@arcgis/core/geometry/Point';
-import { useMap } from './hooks/useMap';
-import { useSelectedDirection } from './hooks/useSelectedDirection';
-import { useStopMarkers } from './hooks/useStopMarkers';
-import { MapPopup } from './components/MapPopup';
-import { createPointGraphic } from './misc/createPointGraphic';
-import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs';
-import { WalkingPerson } from './components/icons/WalkingPerson';
-import TravelMode from '@arcgis/core/rest/support/TravelMode';
-import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
-import * as locator from '@arcgis/core/rest/locator.js';
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from './components/ui/collapsible';
-import { MapViewContext } from './providers/mapViewContext';
-import MapView from '@arcgis/core/views/MapView';
-import { ZoomWidget } from './components/ZoomWidget';
-import { LocateWidget } from './components/LocateWidget';
-import {
-  UserPositionContext,
-  UserPositionContextValue,
-} from './providers/userPositionContext';
-import { useGeolocation } from './hooks/useGeolocation';
-import { BasemapWidget } from './components/BasemapWidget';
-import { MaximizeRouteWidget } from './components/MaximizeRouteWidget';
 
 function App() {
   const { mapDiv, view, routeLayer, stopsLayer } = useMap();
@@ -60,11 +60,11 @@ function App() {
     setTravelMode,
     error,
   } = useRoute(view, routeLayer, stopsLayer);
-  const { selectedDirectionIndex, onSelectDirection } = useSelectedDirection(
+  const { selectedDirectionIndex, onSelectDirection } = useRouteDirection(
     view,
     routeResult
   );
-  const { position, setPosition, requestLocation } = useGeolocation();
+  const { position, setPosition, requestLocation } = useGeolocation(view);
   useStopMarkers(stops, view, stopsLayer);
   const [isMapPopupOpen, setIsMapPopupOpen] = useState(false);
   // TODO: rework with listener

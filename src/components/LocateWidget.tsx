@@ -3,16 +3,15 @@ import { Button } from '@/components/ui/button';
 import cn from 'classnames';
 import { useEffect } from 'react';
 import { useMapView } from '@/providers/mapViewContext';
-import { useGeolocation } from '@/hooks/useGeolocation';
 import Point from '@arcgis/core/geometry/Point';
-import { UserPosition } from '@/providers/userPositionContext';
+import { UserPosition, useUserPosition } from '@/providers/userPositionContext';
 
 interface Props {
   className?: string;
 }
 export const LocateWidget: React.FC<Props> = ({ className }) => {
   const view = useMapView();
-  const { position, requestLocation } = useGeolocation(view);
+  const { position, requestLocation } = useUserPosition();
 
   const zoomToUserPosition = (
     location: UserPosition,

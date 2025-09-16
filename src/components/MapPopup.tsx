@@ -1,5 +1,5 @@
 import { MapPinPlusInside, X } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 import MapView from '@arcgis/core/views/MapView';
 import { InitialRoutePoint } from '@/hooks/useRoute';
 

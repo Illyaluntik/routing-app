@@ -4,6 +4,9 @@ import SimpleLineSymbol from '@arcgis/core/symbols/SimpleLineSymbol';
 
 export const createDirectionGraphic = (geometry: nullish | Geometry) => {
   return new Graphic({
+    attributes: {
+      id: 'route-direction',
+    },
     geometry: geometry,
     symbol: new SimpleLineSymbol({
       color: [0, 76, 153, 1],

@@ -4,7 +4,7 @@ import Graphic from '@arcgis/core/Graphic';
 import MapView from '@arcgis/core/views/MapView';
 import { useState, useEffect } from 'react';
 
-export const useGeolocation = (view: MapView) => {
+export const useGeolocation = (view: MapView | null) => {
   const [position, setPosition] = useState<UserPosition | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [userLocationGraphic, setUserLocationGraphic] =
