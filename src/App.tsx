@@ -220,7 +220,7 @@ function App() {
           )}
 
           {((isMobile && !isMapPopupOpen) || !isMobile) && !routeMinimized && (
-            <div className="absolute bottom-5 lg:bottom-auto lg:top-5 left-5 lg:left-auto lg:right-5 z-50 flex flex-col gap-2.5 w-full max-w-[calc(100vw-40px)] sm:max-w-[400px]">
+            <div className="absolute bottom-5 lg:bottom-auto lg:top-5 left-5 lg:left-auto lg:right-5 z-70 flex flex-col gap-2.5 w-full max-w-[calc(100vw-40px)] sm:max-w-[400px]">
               {stops.length > 0 && (
                 <div className="bg-white/70 rounded-md shadow-md">
                   <div className="backdrop-blur-sm p-2.5 !rounded-md relative max-h-[calc(100dvh-106px)] lg:max-h-[calc(100vh-40px)] h-full flex flex-col">

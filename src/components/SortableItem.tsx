@@ -1,11 +1,11 @@
+import { Autocomplete } from '@/components/Autocomplete';
+import { Button } from '@/components/ui/button';
+import { RouteStop } from '@/hooks/useRoute';
+import { cn } from '@/lib/utils';
+import { useRouteContext } from '@/providers/routeContext';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CircleDot, EllipsisVertical, Flag, Grip, X } from 'lucide-react';
-import { Autocomplete } from '@/components/Autocomplete';
-import { Button } from '@/components/ui/button';
-import { useRouteContext } from '@/providers/routeContext';
-import { RouteStop } from '@/hooks/useRoute';
-import { cn } from '@/lib/utils';
 
 interface Props {
   stop: RouteStop;
@@ -51,7 +51,6 @@ const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
         placeholder="Type or select a location"
         initialQuery={stop.label}
         className="shadow-sm pr-10"
-        suggestionsListClassName="bottom-10 lg:bottom-auto"
       />
       {stops.length > 2 && index !== 0 && (
         <Button

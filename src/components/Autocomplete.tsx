@@ -1,10 +1,9 @@
-import { useRef, useState } from 'react';
-import axios from 'axios';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useEffect } from 'react';
-import { useUserPosition } from '@/providers/userPositionContext';
 import { cn } from '@/lib/utils';
+import { useUserPosition } from '@/providers/userPositionContext';
+import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
 
 interface Suggestion {
   label: string;
@@ -17,7 +16,6 @@ interface Props {
   onInputChange?: (value: string) => void;
   initialQuery?: string;
   className?: string;
-  suggestionsListClassName?: string;
 }
 
 export const Autocomplete: React.FC<Props> = ({
@@ -26,15 +24,34 @@ export const Autocomplete: React.FC<Props> = ({
   onInputChange,
   initialQuery = '',
   className,
-  suggestionsListClassName,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsListRef = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState(initialQuery);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [, setLoading] = useState(false);
   const { position } = useUserPosition();
+  const [listPosition, setListPosition] = useState<'top' | 'bottom'>('bottom');
+
+  useEffect(() => {
+    if (!isFocused || !inputRef.current || !suggestionsListRef.current) {
+      return;
+    }
+
+    const listHeight = suggestionsListRef.current.clientHeight;
+    const clientHeight = document.body.clientHeight;
+    const boundingClientRect = inputRef.current.getBoundingClientRect();
+    const inputY = boundingClientRect.y;
+    const inputHeight = boundingClientRect.height;
+
+    if (listHeight <= clientHeight - (inputY + inputHeight)) {
+      setListPosition('bottom');
+    } else {
+      setListPosition('top');
+    }
+  }, [isFocused, suggestions]);
 
   useEffect(() => {
     setQuery(initialQuery);
@@ -170,12 +187,14 @@ export const Autocomplete: React.FC<Props> = ({
       />
       {suggestions.length > 0 && isFocused && (
         <div
+          ref={suggestionsListRef}
           className={cn(
-            'absolute z-50 w-full',
-            suggestionsListClassName
+            'absolute z-50 w-full shadow-md',
+            listPosition === 'top' && 'bottom-full',
+            listPosition === 'bottom' && 'top-full'
           )}
         >
-          <ScrollArea className="w-full bg-white text-black shadow-md rounded-md mt-1">
+          <ScrollArea className="w-full bg-white text-black rounded-md mt-1">
             <ul>
               {suggestions.map((s, i) => (
                 <li
