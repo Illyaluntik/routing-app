@@ -29,39 +29,45 @@ const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
       style={style}
       className={cn('relative flex items-center gap-1 mb-2.5 group', className)}
     >
+      <Grip
+        {...listeners}
+        {...attributes}
+        className={cn(
+          'size-5 cursor-grab text-stone-500 touch-none outline-none order-1 lg:order-none',
+          'group-hover:block sm:hidden',
+          'block sm:group-hover:block'
+        )}
+      />
       {index < stops.length - 1 && (
         <CircleDot className="size-5 group-hover:hidden" />
       )}
       {index === stops.length - 1 && (
         <Flag className="size-5 group-hover:hidden" />
       )}
-      <Grip
-        {...listeners}
-        {...attributes}
-        className="size-5 cursor-grab text-stone-500 hidden group-hover:block"
-      />
       <EllipsisVertical className="absolute left-1 top-full size-2.5 ellipsis-icon" />
-      <Autocomplete
-        onSelect={(location, label) => {
-          updateStop(stop.id, location, label);
-        }}
-        onInputChange={(value) => {
-          updateStop(stop.id, null, value);
-        }}
-        placeholder="Type or select a location"
-        initialQuery={stop.label}
-        className="shadow-sm pr-10"
-      />
-      {stops.length > 2 && index !== 0 && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-0 right-0 cursor-pointer"
-          onClick={() => removeStop(stop.id)}
-        >
-          <X />
-        </Button>
-      )}
+      <div className="relative w-full">
+        <Autocomplete
+          onSelect={(location, label) => {
+            updateStop(stop.id, location, label);
+          }}
+          onInputChange={(value) => {
+            updateStop(stop.id, null, value);
+          }}
+          placeholder="Type or select a location"
+          initialQuery={stop.label}
+          className="shadow-sm pr-10"
+        />
+        {stops.length > 2 && index !== 0 && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-0 right-0 cursor-pointer"
+            onClick={() => removeStop(stop.id)}
+          >
+            <X />
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
