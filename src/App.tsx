@@ -17,6 +17,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ZoomWidget } from '@/components/ZoomWidget';
 import { useBlockTouchDefaults } from '@/hooks/useBlockTouchDefaults';
 import { useGeolocation } from '@/hooks/useGeolocation';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useMap } from '@/hooks/useMap';
 import { MAX_STOPS, useRoute } from '@/hooks/useRoute';
 import { useRouteDirection } from '@/hooks/useRouteDirection';
@@ -62,8 +63,7 @@ function App() {
   const { position, setPosition, requestLocation } = useGeolocation(view);
   useStopMarkers(stops, view, stopsLayer);
   const [isMapPopupOpen, setIsMapPopupOpen] = useState(false);
-  // TODO: rework with listener
-  const isMobile = useMemo(() => window.innerWidth <= 1024, []);
+  const isMobile = useIsMobile(1024);
   const [routeMinimized, setRouteMinimized] = useState(false);
   useBlockTouchDefaults(view);
 
@@ -94,7 +94,6 @@ function App() {
       />
     );
 
-    // setIsMapPopupOpen(true);
     view.openPopup({
       location: new Point({
         longitude: coords[0],
