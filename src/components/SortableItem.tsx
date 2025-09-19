@@ -39,10 +39,10 @@ const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
         )}
       />
       {index < stops.length - 1 && (
-        <CircleDot className="size-5 group-hover:hidden" />
+        <CircleDot className="size-5 lg:group-hover:hidden" />
       )}
       {index === stops.length - 1 && (
-        <Flag className="size-5 group-hover:hidden" />
+        <Flag className="size-5 lg:group-hover:hidden" />
       )}
       <EllipsisVertical className="absolute left-1 top-full size-2.5 ellipsis-icon" />
       <div className="relative w-full">
