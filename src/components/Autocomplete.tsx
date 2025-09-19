@@ -1,13 +1,17 @@
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { cn } from '@/lib/utils';
 import { useUserPosition } from '@/providers/userPositionContext';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
 
 interface Suggestion {
   label: string;
-  location: [number, number];
+  location: [number, number] | string;
 }
 
 interface Props {
@@ -33,25 +37,7 @@ export const Autocomplete: React.FC<Props> = ({
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const [, setLoading] = useState(false);
   const { position } = useUserPosition();
-  const [listPosition, setListPosition] = useState<'top' | 'bottom'>('bottom');
-
-  useEffect(() => {
-    if (!isFocused || !inputRef.current || !suggestionsListRef.current) {
-      return;
-    }
-
-    const listHeight = suggestionsListRef.current.clientHeight;
-    const clientHeight = document.body.clientHeight;
-    const boundingClientRect = inputRef.current.getBoundingClientRect();
-    const inputY = boundingClientRect.y;
-    const inputHeight = boundingClientRect.height;
-
-    if (listHeight <= clientHeight - (inputY + inputHeight)) {
-      setListPosition('bottom');
-    } else {
-      setListPosition('top');
-    }
-  }, [isFocused, suggestions]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     setQuery(initialQuery);
@@ -77,11 +63,7 @@ export const Autocomplete: React.FC<Props> = ({
           return prev > 0 ? prev - 1 : suggestions.length - 1;
         });
       } else if (e.key === 'Enter') {
-        if (
-          highlightedIndex !== null &&
-          highlightedIndex >= 0 &&
-          highlightedIndex < suggestions.length
-        ) {
+        if (highlightedIndex !== null && suggestions[highlightedIndex]) {
           handleSelect(suggestions[highlightedIndex]);
         }
       }
@@ -135,15 +117,13 @@ export const Autocomplete: React.FC<Props> = ({
   const handleSelect = async (s: Suggestion) => {
     setQuery(s.label);
     setSuggestions([]);
+    setIsFocused(false);
 
     try {
       const geocodeResp = await axios.get(
         'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates',
         {
-          params: {
-            f: 'json',
-            magicKey: s.location,
-          },
+          params: { f: 'json', magicKey: s.location },
         }
       );
 
@@ -166,7 +146,9 @@ export const Autocomplete: React.FC<Props> = ({
   };
 
   const handleBlur = () => {
-    setIsFocused(false);
+    if (!isMobile) {
+      setTimeout(() => setIsFocused(false), 200);
+    }
   };
 
   return (
@@ -180,19 +162,73 @@ export const Autocomplete: React.FC<Props> = ({
           onInputChange?.(e.target.value);
         }}
         onFocus={handleFocus}
-        onBlur={() => {
-          setTimeout(handleBlur, 200);
-        }}
+        onBlur={handleBlur}
         className={cn('bg-white', className)}
       />
-      {suggestions.length > 0 && isFocused && (
+
+      {/* Mobile overlay */}
+      {isMobile &&
+        isFocused &&
+        createPortal(
+          <div className="fixed top-5 bottom-0 inset-x-0 rounded-t-xl z-[100] bg-white p-4 overflow-auto shadow-lg shadow-black">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="relative w-full">
+                <Input
+                  autoFocus
+                  value={query}
+                  onChange={(e) => {
+                    handleChange(e.target.value);
+                    onInputChange?.(e.target.value);
+                  }}
+                  placeholder={placeholder}
+                  className="pr-10"
+                />
+                <Button
+                  className="absolute top-0 right-0 cursor-pointer z-50"
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => {
+                    handleChange('');
+                  }}
+                >
+                  <X />
+                </Button>
+              </div>
+              <button
+                className="text-sm"
+                onClick={() => {
+                  setIsFocused(false);
+                }}
+              >
+                Close
+              </button>
+            </div>
+            <ScrollArea className="max-h-[calc(100vh-104px)]">
+              <ul>
+                {suggestions.map((s, i) => (
+                  <li
+                    key={i}
+                    className={cn(
+                      'p-2 hover:bg-gray-100 cursor-pointer border-b border-black/10 last:border-none',
+                      highlightedIndex === i ? 'bg-gray-100' : ''
+                    )}
+                    onClick={() => handleSelect(s)}
+                    onMouseOver={() => setHighlightedIndex(null)}
+                  >
+                    {s.label}
+                  </li>
+                ))}
+              </ul>
+            </ScrollArea>
+          </div>,
+          document.body
+        )}
+
+      {/* Desktop dropdown */}
+      {!isMobile && suggestions.length > 0 && isFocused && (
         <div
           ref={suggestionsListRef}
-          className={cn(
-            'absolute z-50 w-full shadow-md',
-            listPosition === 'top' && 'bottom-full',
-            listPosition === 'bottom' && 'top-full'
-          )}
+          className="absolute z-50 w-full shadow-md top-full"
         >
           <ScrollArea className="w-full bg-white text-black rounded-md mt-1">
             <ul>
