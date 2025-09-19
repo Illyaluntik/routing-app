@@ -4,6 +4,7 @@ import { WalkingPerson } from '@/components/icons/WalkingPerson';
 import { LocateWidget } from '@/components/LocateWidget';
 import { ManeuverIcon } from '@/components/ManeuverIcon';
 import { MapPopup } from '@/components/MapPopup';
+import { MapRotationWidget } from '@/components/MapRotationWidget';
 import { RouteDetailToggleWidget } from '@/components/RouteDetailToggleWidget';
 import StopsList from '@/components/StopsList';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,7 @@ import {
 } from '@/components/ui/collapsible';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ZoomWidget } from '@/components/ZoomWidget';
+import { useBlockTouchDefaults } from '@/hooks/useBlockTouchDefaults';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMap } from '@/hooks/useMap';
 import { MAX_STOPS, useRoute } from '@/hooks/useRoute';
@@ -35,7 +37,6 @@ import cn from 'classnames';
 import { Car, ChevronDown, TriangleAlert, Truck, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { MapRotationWidget } from '@/components/MapRotationWidget';
 
 function App() {
   const { mapDiv, view, routeLayer, stopsLayer } = useMap();
@@ -64,6 +65,7 @@ function App() {
   // TODO: rework with listener
   const isMobile = useMemo(() => window.innerWidth <= 1024, []);
   const [routeMinimized, setRouteMinimized] = useState(false);
+  useBlockTouchDefaults(view);
 
   const searchLocation = (coords: [number, number], label: string) => {
     if (!view) {
