@@ -1,18 +1,18 @@
+import { useTravelModes } from '@/hooks/useTravelModes';
 import { createPointGraphic } from '@/misc/createPointGraphic';
 import { createRouteGraphic } from '@/misc/createRouteGraphic';
 import { createStopId } from '@/misc/createStopId';
 import Graphic from '@arcgis/core/Graphic';
+import EsriError from '@arcgis/core/core/Error.js';
 import Geometry from '@arcgis/core/geometry/Geometry.js';
 import Point from '@arcgis/core/geometry/Point';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import * as route from '@arcgis/core/rest/route';
 import FeatureSet from '@arcgis/core/rest/support/FeatureSet';
 import RouteParameters from '@arcgis/core/rest/support/RouteParameters';
+import TravelMode from '@arcgis/core/rest/support/TravelMode';
 import MapView from '@arcgis/core/views/MapView';
 import { useEffect, useMemo, useState } from 'react';
-import { useTravelModes } from '@/hooks/useTravelModes';
-import TravelMode from '@arcgis/core/rest/support/TravelMode';
-import EsriError from '@arcgis/core/core/Error.js';
 
 export interface RouteResult {
   geometry: nullish | Geometry;
@@ -37,7 +37,7 @@ export interface InitialRoutePoint {
   label: string;
 }
 
-export const MAX_STOPS = 10;
+export const MAX_STOPS = 20;
 
 export const useRoute = (
   view: MapView | null,

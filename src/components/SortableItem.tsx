@@ -27,7 +27,7 @@ const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className={cn('relative flex items-center gap-1 mb-2.5 group', className)}
+      className={cn('relative flex items-center gap-1 group', className)}
     >
       <Grip
         {...listeners}

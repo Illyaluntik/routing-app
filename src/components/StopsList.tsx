@@ -1,27 +1,29 @@
+import SortableItem from '@/components/SortableItem';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { MAX_STOPS } from '@/hooks/useRoute';
+import { cn } from '@/lib/utils';
+import { useRouteContext } from '@/providers/routeContext';
 import {
-  DndContext,
   closestCenter,
+  DndContext,
+  DragEndEvent,
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import SortableItem from '@/components/SortableItem';
-import { useRouteContext } from '@/providers/routeContext';
-import { Button } from '@/components/ui/button';
 import { ChevronsDownUp, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 
-const MAX_DISPLAY_LENGTH = 4;
+const MAX_DISPLAY_LENGTH = 3;
 
 const StopsList = () => {
-  const { stops, setStops } = useRouteContext();
+  const { stops, setStops, hasUnfilledStops, addStop } = useRouteContext();
   const sensors = useSensors(useSensor(PointerSensor));
 
   function handleDragEnd(event: DragEndEvent) {
@@ -45,26 +47,38 @@ const StopsList = () => {
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={stops} strategy={verticalListSortingStrategy}>
-        {stops
-          .slice(0, isListExpanded ? stops.length : MAX_DISPLAY_LENGTH)
-          .map((stop, index) => (
-            <SortableItem
-              key={stop.id}
-              stop={stop}
-              index={index}
-              className={cn(
-                ((isListExpanded && index === stops.length - 1) ||
-                  (!isListExpanded &&
-                    index ===
-                      Math.min(MAX_DISPLAY_LENGTH - 1, stops.length - 1))) &&
-                  '[&_.ellipsis-icon]:hidden'
-              )}
-            />
-          ))}
+        <ScrollArea
+          className={cn(
+            'max-h-full overflow-auto scrollable-element',
+            !isListExpanded && 'min-h-fit'
+          )}
+        >
+          <div className="flex flex-col gap-2.5">
+            {stops
+              .slice(0, isListExpanded ? stops.length : MAX_DISPLAY_LENGTH)
+              .map((stop, index) => (
+                <SortableItem
+                  key={stop.id}
+                  stop={stop}
+                  index={index}
+                  className={cn(
+                    ((isListExpanded && index === stops.length - 1) ||
+                      (!isListExpanded &&
+                        index ===
+                          Math.min(
+                            MAX_DISPLAY_LENGTH - 1,
+                            stops.length - 1
+                          ))) &&
+                      '[&_.ellipsis-icon]:hidden'
+                  )}
+                />
+              ))}
+          </div>
+        </ScrollArea>
         {stops.length > MAX_DISPLAY_LENGTH && (
           <Button
             variant="ghost"
-            className="cursor-pointer text-xs h-min p-0 !bg-transparent hover:text-stone-500"
+            className="cursor-pointer text-xs h-min p-0 !bg-transparent hover:text-stone-500 mt-2.5"
             onClick={() => setIsListExpanded(!isListExpanded)}
           >
             {!isListExpanded && (
@@ -79,6 +93,21 @@ const StopsList = () => {
                 <ChevronsDownUp className="size-3" />
               </>
             )}
+          </Button>
+        )}
+        {!hasUnfilledStops && stops.length < MAX_STOPS && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full mt-2.5 cursor-pointer"
+            onClick={() => {
+              if (stops.length > MAX_DISPLAY_LENGTH && !isListExpanded) {
+                setIsListExpanded(true);
+              }
+              addStop();
+            }}
+          >
+            Add Stop
           </Button>
         )}
       </SortableContext>

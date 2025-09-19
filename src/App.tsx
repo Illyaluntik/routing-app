@@ -19,7 +19,7 @@ import { useBlockTouchDefaults } from '@/hooks/useBlockTouchDefaults';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useMap } from '@/hooks/useMap';
-import { MAX_STOPS, useRoute } from '@/hooks/useRoute';
+import { useRoute } from '@/hooks/useRoute';
 import { useRouteDirection } from '@/hooks/useRouteDirection';
 import { useStopMarkers } from '@/hooks/useStopMarkers';
 import { createPointGraphic } from '@/misc/createPointGraphic';
@@ -166,12 +166,14 @@ function App() {
 
   const routeContextValue = useMemo(
     () => ({
-      stops: stops,
-      setStops: setStops,
-      updateStop: updateStop,
-      removeStop: removeStop,
+      stops,
+      hasUnfilledStops,
+      setStops,
+      updateStop,
+      removeStop,
+      addStop,
     }),
-    [stops, setStops, updateStop, removeStop]
+    [stops, hasUnfilledStops, setStops, updateStop, removeStop, addStop]
   );
 
   const userPositionContextValue = useMemo(
@@ -263,16 +265,6 @@ function App() {
                     <RouteContext.Provider value={routeContextValue}>
                       <StopsList />
                     </RouteContext.Provider>
-
-                    {!hasUnfilledStops && stops.length < MAX_STOPS && (
-                      <Button
-                        variant="outline"
-                        className="w-full mt-2.5 cursor-pointer"
-                        onClick={addStop}
-                      >
-                        Add Stop
-                      </Button>
-                    )}
 
                     {error && (
                       <div className="flex items-start gap-2.5 mt-5 text-gray-00">
