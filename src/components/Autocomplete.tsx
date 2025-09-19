@@ -225,30 +225,46 @@ export const Autocomplete: React.FC<Props> = ({
         )}
 
       {/* Desktop dropdown */}
-      {!isMobile && suggestions.length > 0 && isFocused && (
-        <div
-          ref={suggestionsListRef}
-          className="absolute z-50 w-full shadow-md top-full"
-        >
-          <ScrollArea className="w-full bg-white text-black rounded-md mt-1">
-            <ul>
-              {suggestions.map((s, i) => (
-                <li
-                  key={i}
-                  className={cn(
-                    'p-2 hover:bg-gray-100 cursor-pointer',
-                    highlightedIndex === i ? 'bg-gray-100' : ''
-                  )}
-                  onClick={() => handleSelect(s)}
-                  onMouseOver={() => setHighlightedIndex(null)}
-                >
-                  {s.label}
-                </li>
-              ))}
-            </ul>
-          </ScrollArea>
-        </div>
-      )}
+      {!isMobile &&
+        suggestions.length > 0 &&
+        isFocused &&
+        createPortal(
+          <div
+            ref={suggestionsListRef}
+            className="absolute z-[100] w-full shadow-md"
+            style={{
+              top: inputRef.current
+                ? inputRef.current.getBoundingClientRect().bottom +
+                  window.scrollY
+                : 0,
+              left: inputRef.current
+                ? inputRef.current.getBoundingClientRect().left + window.scrollX
+                : 0,
+              width: inputRef.current
+                ? inputRef.current.offsetWidth
+                : undefined,
+            }}
+          >
+            <ScrollArea className="w-full bg-white text-black rounded-md">
+              <ul>
+                {suggestions.map((s, i) => (
+                  <li
+                    key={i}
+                    className={cn(
+                      'p-2 hover:bg-gray-100 cursor-pointer',
+                      highlightedIndex === i ? 'bg-gray-100' : ''
+                    )}
+                    onClick={() => handleSelect(s)}
+                    onMouseOver={() => setHighlightedIndex(null)}
+                  >
+                    {s.label}
+                  </li>
+                ))}
+              </ul>
+            </ScrollArea>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
