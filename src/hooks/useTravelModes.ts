@@ -28,7 +28,7 @@ export const useTravelModes = () => {
   useEffect(() => {
     const fetchTravelModes = async () => {
       const serviceDescription = await networkService.fetchServiceDescription(
-        import.meta.env.VITE_ARCGIS_ROUTE_API_SERVICE_URL,
+        import.meta.env.VITE_ARCGIS_ROUTING_API,
         import.meta.env.VITE_ARCGIS_API_KEY
       );
 

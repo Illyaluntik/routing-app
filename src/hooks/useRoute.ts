@@ -2,6 +2,7 @@ import { useTravelModes } from '@/hooks/useTravelModes';
 import { createPointGraphic } from '@/misc/createPointGraphic';
 import { createRouteGraphic } from '@/misc/createRouteGraphic';
 import { createStopId } from '@/misc/createStopId';
+import { UserPosition } from '@/providers/userPositionContext';
 import Graphic from '@arcgis/core/Graphic';
 import EsriError from '@arcgis/core/core/Error.js';
 import Geometry from '@arcgis/core/geometry/Geometry.js';
@@ -30,6 +31,7 @@ export interface RouteStop {
   coordinates?: [number, number] | null;
   label?: string;
   graphic?: Graphic;
+  userLocation?: boolean;
 }
 
 export interface InitialRoutePoint {
@@ -41,6 +43,7 @@ export const MAX_STOPS = 20;
 
 export const useRoute = (
   view: MapView | null,
+  position: UserPosition | null,
   routeLayer: GraphicsLayer | null,
   stopsLayer: GraphicsLayer | null
 ) => {
@@ -58,12 +61,24 @@ export const useRoute = (
       return;
     }
 
-    const initialStart: RouteStop = {
-      id: createStopId(),
-      coordinates: start?.coords,
-      label: start?.label,
-      graphic: createPointGraphic(start?.coords),
-    };
+    const initialStart: RouteStop =
+      position !== null && !start
+        ? {
+            id: createStopId(),
+            coordinates: [position.longitude, position.latitude],
+            label: 'My Location',
+            userLocation: true,
+            graphic: createPointGraphic([
+              position.longitude,
+              position.latitude,
+            ]),
+          }
+        : {
+            id: createStopId(),
+            coordinates: start?.coords,
+            label: start?.label,
+            graphic: createPointGraphic(start?.coords),
+          };
     const initialEnd: RouteStop = {
       id: createStopId(),
       coordinates: end?.coords,
@@ -175,7 +190,7 @@ export const useRoute = (
       });
 
       const result = await route.solve(
-        import.meta.env.VITE_ARCGIS_ROUTE_SERVICE_URL,
+        import.meta.env.VITE_ARCGIS_ROUTING,
         params
       );
 

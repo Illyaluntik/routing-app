@@ -49,11 +49,11 @@ const StopsList = () => {
       <SortableContext items={stops} strategy={verticalListSortingStrategy}>
         <ScrollArea
           className={cn(
-            'max-h-full overflow-auto scrollable-element',
+            'overflow-auto scrollable-element max-h-[calc(100vh-238px-40px)]',
             !isListExpanded && 'min-h-fit'
           )}
         >
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 p-[3px] pl-0">
             {stops
               .slice(0, isListExpanded ? stops.length : MAX_DISPLAY_LENGTH)
               .map((stop, index) => (
@@ -101,7 +101,7 @@ const StopsList = () => {
             size="sm"
             className="w-full mt-2.5 cursor-pointer"
             onClick={() => {
-              if (stops.length > MAX_DISPLAY_LENGTH && !isListExpanded) {
+              if (stops.length + 1 > MAX_DISPLAY_LENGTH && !isListExpanded) {
                 setIsListExpanded(true);
               }
               addStop();

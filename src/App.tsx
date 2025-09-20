@@ -1,4 +1,4 @@
-import { Autocomplete } from '@/components/Autocomplete';
+import { Autocomplete } from '@/components/Autocomplete/Autocomplete';
 import { BasemapWidget } from '@/components/BasemapWidget';
 import { WalkingPerson } from '@/components/icons/WalkingPerson';
 import { LocateWidget } from '@/components/LocateWidget';
@@ -38,9 +38,12 @@ import cn from 'classnames';
 import { Car, ChevronDown, TriangleAlert, Truck, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { findAddressCandidates } from '@/misc/findAddressCandidates';
+import { AutocompleteSuggestion } from '@/hooks/autocomplete/useAutocomplete';
 
 function App() {
   const { mapDiv, view, routeLayer, stopsLayer } = useMap();
+  const { position, setPosition, requestLocation } = useGeolocation(view);
   const {
     stops,
     setStops,
@@ -55,26 +58,31 @@ function App() {
     travelMode,
     setTravelMode,
     error,
-  } = useRoute(view, routeLayer, stopsLayer);
+  } = useRoute(view, position, routeLayer, stopsLayer);
   const { selectedDirectionIndex, onSelectDirection } = useRouteDirection(
     view,
     routeResult
   );
-  const { position, setPosition, requestLocation } = useGeolocation(view);
   useStopMarkers(stops, view, stopsLayer);
   const [isMapPopupOpen, setIsMapPopupOpen] = useState(false);
   const isMobile = useIsMobile(1024);
   const [routeMinimized, setRouteMinimized] = useState(false);
   useBlockTouchDefaults(view);
 
-  const searchLocation = (coords: [number, number], label: string) => {
+  const searchLocation = async (s: AutocompleteSuggestion) => {
     if (!view) {
+      return;
+    }
+
+    const result = await findAddressCandidates(s);
+
+    if (!result) {
       return;
     }
 
     view.goTo(
       {
-        target: createPointGraphic(coords),
+        target: createPointGraphic(result.coords),
         zoom: 20,
       },
       {
@@ -88,16 +96,16 @@ function App() {
         view={view}
         createInitialRoute={createInitialRoute}
         addStop={addStopFromMap}
-        coords={coords}
-        label={label}
+        coords={result.coords}
+        label={result.label}
         showDirectionsButtons={stops.length === 0}
       />
     );
 
     view.openPopup({
       location: new Point({
-        longitude: coords[0],
-        latitude: coords[1],
+        longitude: result.coords[0],
+        latitude: result.coords[1],
       }),
       content: container,
     });
@@ -118,7 +126,7 @@ function App() {
 
       try {
         const result = await locator.locationToAddress(
-          import.meta.env.VITE_ARCGIS_LOCATION_TO_ADDRESS_SERVICE_URL,
+          import.meta.env.VITE_ARCGIS_GEOCODING,
           {
             location: mapPoint,
           }

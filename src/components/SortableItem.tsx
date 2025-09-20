@@ -1,7 +1,8 @@
-import { Autocomplete } from '@/components/Autocomplete';
+import { Autocomplete } from '@/components/Autocomplete/Autocomplete';
 import { Button } from '@/components/ui/button';
 import { RouteStop } from '@/hooks/useRoute';
 import { cn } from '@/lib/utils';
+import { findAddressCandidates } from '@/misc/findAddressCandidates';
 import { useRouteContext } from '@/providers/routeContext';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -47,8 +48,14 @@ const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
       <EllipsisVertical className="absolute left-1 top-full size-2.5 ellipsis-icon" />
       <div className="relative w-full">
         <Autocomplete
-          onSelect={(location, label) => {
-            updateStop(stop.id, location, label);
+          onSelect={(s) => {
+            findAddressCandidates(s).then((result) => {
+              if (!result) {
+                return;
+              }
+
+              updateStop(stop.id, result.coords, result.label);
+            });
           }}
           onInputChange={(value) => {
             updateStop(stop.id, null, value);
