@@ -1,22 +1,29 @@
-import { Navigation } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import cn from 'classnames';
-import { useEffect } from 'react';
-import { useMapView } from '@/providers/mapViewContext';
+import { useMapViewContext } from '@/providers/MapViewContext/mapViewContext';
+import {
+  UserPosition,
+  useUserPositionContext,
+} from '@/providers/UserPositionContext/userPositionContext';
 import Point from '@arcgis/core/geometry/Point';
-import { UserPosition, useUserPosition } from '@/providers/userPositionContext';
+import cn from 'classnames';
+import { Navigation } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface Props {
   className?: string;
 }
 export const LocateWidget: React.FC<Props> = ({ className }) => {
-  const view = useMapView();
-  const { position, requestLocation } = useUserPosition();
+  const { view } = useMapViewContext();
+  const { position, requestLocation } = useUserPositionContext();
 
   const zoomToUserPosition = (
     location: UserPosition,
     animationDuration = 2500
   ) => {
+    if (!view) {
+      return;
+    }
+
     view.goTo(
       {
         target: new Point({

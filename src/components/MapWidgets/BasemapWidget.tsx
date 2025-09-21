@@ -1,16 +1,16 @@
-import { useRef, useState } from 'react';
-import { Layers } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useMapView } from '@/providers/mapViewContext';
 import { BASEMAPS, DEFAULT_BASEMAP } from '@/config/basemaps';
+import { cn } from '@/lib/utils';
+import { useMapViewContext } from '@/providers/MapViewContext/mapViewContext';
+import { Layers } from 'lucide-react';
+import { useRef, useState } from 'react';
 
 export interface Props {
   className?: string;
 }
 
 export const BasemapWidget: React.FC<Props> = ({ className }) => {
-  const view = useMapView();
+  const { view } = useMapViewContext();
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState(DEFAULT_BASEMAP.id);
   const timeoutRef = useRef<number | null>(null);

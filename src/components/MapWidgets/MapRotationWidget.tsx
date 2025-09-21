@@ -1,15 +1,15 @@
 import { Button } from '@/components/ui/button';
 import cn from 'classnames';
-import { useMapView } from '@/providers/mapViewContext';
 import { useEffect, useState } from 'react';
 import { Compass } from 'lucide-react';
 import * as reactiveUtils from '@arcgis/core/core/reactiveUtils';
+import { useMapViewContext } from '@/providers/MapViewContext/mapViewContext';
 
 interface Props {
   className?: string;
 }
 export const MapRotationWidget: React.FC<Props> = ({ className }) => {
-  const view = useMapView();
+  const { view } = useMapViewContext();
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const MapRotationWidget: React.FC<Props> = ({ className }) => {
           variant="ghost"
           className="cursor-pointer size-10"
           onClick={() => {
-            view.goTo({
+            view?.goTo({
               rotation: 0,
             });
           }}

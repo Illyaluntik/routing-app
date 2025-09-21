@@ -1,8 +1,9 @@
+import { useStopMarkers } from '@/hooks/useStopMarkers';
 import { useTravelModes } from '@/hooks/useTravelModes';
 import { createPointGraphic } from '@/misc/createPointGraphic';
 import { createRouteGraphic } from '@/misc/createRouteGraphic';
 import { createStopId } from '@/misc/createStopId';
-import { UserPosition } from '@/providers/userPositionContext';
+import { UserPosition } from '@/providers/UserPositionContext/userPositionContext';
 import Graphic from '@arcgis/core/Graphic';
 import EsriError from '@arcgis/core/core/Error.js';
 import Geometry from '@arcgis/core/geometry/Geometry.js';
@@ -52,6 +53,7 @@ export const useRoute = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { selectedTravelMode, travelMode, setTravelMode } = useTravelModes();
+  useStopMarkers(stops, view, stopsLayer);
 
   const createInitialRoute = (
     start?: InitialRoutePoint,

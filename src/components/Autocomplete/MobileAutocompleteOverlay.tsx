@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { SuggestionsList } from '@/components/Autocomplete/SuggestionsList';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
-import { useAutocompleteContext } from '@/providers/autocompleteContext';
+import { useAutocompleteContext } from '@/providers/AutocompleteContext/autocompleteContext';
 
 export const MobileAutocompleteOverlay = () => {
   const {

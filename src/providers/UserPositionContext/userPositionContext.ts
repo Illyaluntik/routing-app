@@ -7,7 +7,7 @@ export interface UserPosition {
 
 export interface UserPositionContextValue {
   position: UserPosition | null;
-  setPosition: React.Dispatch<React.SetStateAction<UserPosition>>;
+  setPosition: React.Dispatch<React.SetStateAction<UserPosition | null>>;
   requestLocation: () => void;
 }
 
@@ -15,4 +15,4 @@ export const UserPositionContext = createContext<UserPositionContextValue>(
   undefined as unknown as UserPositionContextValue
 );
 
-export const useUserPosition = () => useContext(UserPositionContext);
+export const useUserPositionContext = () => useContext(UserPositionContext);

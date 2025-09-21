@@ -1,4 +1,4 @@
-import { useUserPosition } from '@/providers/userPositionContext';
+import { useUserPositionContext } from '@/providers/UserPositionContext/userPositionContext';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
@@ -20,7 +20,7 @@ interface SuggestResponse {
 export const useAutocomplete = (query: string) => {
   const [suggestions, setSuggestions] = useState<AutocompleteSuggestion[]>([]);
   const [loading, setLoading] = useState(false);
-  const { position } = useUserPosition();
+  const { position } = useUserPositionContext();
 
   useEffect(() => {
     if (!query) {

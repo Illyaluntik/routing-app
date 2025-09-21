@@ -1,20 +1,16 @@
-import { Maximize2, Minimize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { RouteResult } from '@/hooks/useRoute';
 import { cn } from '@/lib/utils';
+import { useAppUIContext } from '@/providers/AppUIContext/appUIContext';
+import { useRouteContext } from '@/providers/RouteContext/routeContext';
+import { Maximize2, Minimize2 } from 'lucide-react';
 
 interface Props {
-  routeResult: RouteResult | null;
-  routeMinimized: boolean;
-  setRouteMinimized: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
 }
-export const RouteDetailToggleWidget: React.FC<Props> = ({
-  routeResult,
-  routeMinimized,
-  setRouteMinimized,
-  className,
-}) => {
+export const RouteDetailToggleWidget: React.FC<Props> = ({ className }) => {
+  const { routeResult } = useRouteContext();
+  const { routeMinimized, setRouteMinimized } = useAppUIContext();
+
   if (!routeMinimized) {
     return (
       <Button

@@ -8,7 +8,7 @@ import {
 import { useKeyboardNavigation } from '@/hooks/autocomplete/useKeyboardNavigation';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { cn } from '@/lib/utils';
-import { AutocompleteContext } from '@/providers/autocompleteContext';
+import { AutocompleteContext } from '@/providers/AutocompleteContext/autocompleteContext';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface Props {

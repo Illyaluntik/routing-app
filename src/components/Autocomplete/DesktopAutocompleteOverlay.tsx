@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 import { SuggestionsList } from '@/components/Autocomplete/SuggestionsList';
-import { useAutocompleteContext } from '@/providers/autocompleteContext';
+import { useAutocompleteContext } from '@/providers/AutocompleteContext/autocompleteContext';
 import { useDesktopOverlay } from '@/hooks/autocomplete/useDesktopOverlay';
 
 export const DesktopAutocompleteOverlay = () => {

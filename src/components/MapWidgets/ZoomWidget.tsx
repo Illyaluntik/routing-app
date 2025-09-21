@@ -1,13 +1,17 @@
 import { Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import cn from 'classnames';
-import { useMapView } from '@/providers/mapViewContext';
+import { useMapViewContext } from '@/providers/MapViewContext/mapViewContext';
 
 interface Props {
   className?: string;
 }
 export const ZoomWidget: React.FC<Props> = ({ className }) => {
-  const view = useMapView();
+  const { view } = useMapViewContext();
+
+  if (!view) {
+    return null;
+  }
 
   return (
     <div className={cn('bg-white/70 rounded-md shadow-md', className)}>

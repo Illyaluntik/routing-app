@@ -1,6 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { useAutocompleteContext } from '@/providers/autocompleteContext';
+import { useAutocompleteContext } from '@/providers/AutocompleteContext/autocompleteContext';
 
 interface Props {
   className?: string;
