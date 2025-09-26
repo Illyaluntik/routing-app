@@ -1,1 +1,0 @@
-import{as as s,aP as a}from"./index-B8xXt3oP.js";const e=class e{};e.instance=new s("Etc/UTC");let t=e;function i(n){return n instanceof a?n===t.instance:n?.toString().toLowerCase()==="unknown"}function c(n){return i(n)?t.instance:n}export{i as e,c as i,t as o};
