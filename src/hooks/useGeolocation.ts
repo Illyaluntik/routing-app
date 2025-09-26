@@ -1,5 +1,5 @@
 import { createUserLocationGraphic } from '@/misc/createUserLocationGraphic';
-import { UserPosition } from '@/providers/userPositionContext';
+import { UserPosition } from '@/providers/UserPositionContext/userPositionContext';
 import Graphic from '@arcgis/core/Graphic';
 import MapView from '@arcgis/core/views/MapView';
 import { useState, useEffect } from 'react';

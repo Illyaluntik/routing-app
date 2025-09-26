@@ -53,7 +53,7 @@ export const LocateWidget: React.FC<Props> = ({ className }) => {
       <div className="flex flex-col backdrop-blur-sm rounded-md">
         <Button
           variant="ghost"
-          className="cursor-pointer size-10"
+          className="cursor-pointer size-10 active:bg-accent"
           onClick={() => {
             if (position) {
               zoomToUserPosition(position);

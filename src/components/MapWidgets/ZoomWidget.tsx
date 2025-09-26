@@ -18,7 +18,7 @@ export const ZoomWidget: React.FC<Props> = ({ className }) => {
       <div className="flex flex-col backdrop-blur-sm rounded-md">
         <Button
           variant="ghost"
-          className="cursor-pointer size-10"
+          className="cursor-pointer size-10 active:bg-accent"
           onClick={() => {
             view.goTo({ zoom: view.zoom + 1 });
           }}
@@ -28,7 +28,7 @@ export const ZoomWidget: React.FC<Props> = ({ className }) => {
         <div className="border-b border-black/10 w-[80%] ml-[10%]" />
         <Button
           variant="ghost"
-          className="cursor-pointer size-10"
+          className="cursor-pointer size-10 active:bg-accent"
           onClick={() => {
             view.goTo({ zoom: view.zoom - 1 });
           }}

@@ -71,6 +71,7 @@ export const Autocomplete: React.FC<Props> = ({
         ref={inputRef}
         placeholder={placeholder}
         value={query}
+        readOnly={isMobile}
         onChange={(e) => {
           setQuery(e.target.value);
           onInputChange?.(e.target.value);
@@ -81,7 +82,11 @@ export const Autocomplete: React.FC<Props> = ({
             setTimeout(() => setIsFocused(false), 200);
           }
         }}
-        className={cn('bg-white', className)}
+        className={cn(
+          'bg-white',
+          isMobile && isFocused && 'text-white !placeholder-white',
+          className
+        )}
       />
 
       <AutocompleteContext.Provider value={autocompleteContextValue}>

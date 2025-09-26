@@ -34,7 +34,7 @@ export const MapRotationWidget: React.FC<Props> = ({ className }) => {
       <div className="backdrop-blur-sm rounded-md">
         <Button
           variant="ghost"
-          className="cursor-pointer size-10"
+          className="cursor-pointer size-10 active:bg-accent"
           onClick={() => {
             view?.goTo({
               rotation: 0,

@@ -15,7 +15,7 @@ export const MapWidgets = () => {
 
   return (
     <>
-      <div className="absolute top-[90px] lg:top-auto lg:bottom-5 left-5 z-50 flex flex-col gap-1">
+      <div className="absolute top-[90px] lg:top-auto lg:bottom-5 left-5 z-40 flex flex-col gap-1">
         <MapRotationWidget className="order-last lg:order-none" />
         <BasemapWidget />
         <LocateWidget />
@@ -23,7 +23,7 @@ export const MapWidgets = () => {
       </div>
 
       {((isMobile && !mapPopupOpen) || !isMobile) && routeMinimized && (
-        <RouteDetailToggleWidget className="absolute bottom-5 lg:bottom-auto lg:top-5 right-5 z-50" />
+        <RouteDetailToggleWidget className="absolute bottom-5 lg:bottom-auto lg:top-5 right-5 z-40" />
       )}
 
       <MapPopupWidget />

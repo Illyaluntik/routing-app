@@ -1,6 +1,6 @@
 import { MapContainer } from '@/components/MapContainer';
 import { MapWidgets } from '@/components/MapWidgets/MapWidgets';
-import { RoutePanel } from '@/components/RoutePanel';
+import { RoutePanel } from '@/components/RoutePanel/RoutePanel';
 import { SearchBar } from '@/components/SearchBar';
 import { AppUIProvider } from '@/providers/AppUIContext/AppUIProvider';
 import { MapPopupProvider } from '@/providers/MapPopupContext/MapPopupProvider';

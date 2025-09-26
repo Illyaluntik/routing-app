@@ -1,20 +1,19 @@
 import { Autocomplete } from '@/components/Autocomplete/Autocomplete';
-import { Button } from '@/components/ui/button';
+import { XButton } from '@/components/XButton';
 import { RouteStop } from '@/hooks/useRoute';
 import { cn } from '@/lib/utils';
 import { findAddressCandidates } from '@/misc/findAddressCandidates';
 import { useRouteContext } from '@/providers/RouteContext/routeContext';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { CircleDot, EllipsisVertical, Flag, Grip, X } from 'lucide-react';
+import { CircleDot, EllipsisVertical, Flag, Grip } from 'lucide-react';
 
 interface Props {
   stop: RouteStop;
   index: number;
   className?: string;
 }
-
-const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
+export const Stop: React.FC<Props> = ({ stop, index, className }) => {
   const { stops, updateStop, removeStop } = useRouteContext();
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: stop.id });
@@ -45,7 +44,7 @@ const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
       {index === stops.length - 1 && (
         <Flag className="size-5 lg:group-hover:hidden" />
       )}
-      <EllipsisVertical className="absolute left-1 top-full size-2.5 ellipsis-icon" />
+      <EllipsisVertical className="absolute left-1 top-full size-2.5 ellipsis-icon transition-opacity" />
       <div className="relative w-full">
         <Autocomplete
           onSelect={(s) => {
@@ -64,19 +63,13 @@ const SortableItem: React.FC<Props> = ({ stop, index, className }) => {
           initialQuery={stop.label}
           className="shadow-sm pr-10"
         />
-        {stops.length > 2 && index !== 0 && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute top-0 right-0 cursor-pointer"
+        {stops.length > 2 && (
+          <XButton
             onClick={() => removeStop(stop.id)}
-          >
-            <X />
-          </Button>
+            className="absolute top-0 right-0"
+          />
         )}
       </div>
     </div>
   );
 };
-
-export default SortableItem;

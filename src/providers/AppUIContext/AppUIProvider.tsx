@@ -14,6 +14,8 @@ export const AppUIProvider: React.FC<Props> = ({ children }) => {
   const { view } = useMapViewContext();
   const [routeMinimized, setRouteMinimized] = useState(false);
   const [mapPopupOpen, setMapPopupOpen] = useState(false);
+  const [stopsListExpanded, setStopsListExpanded] = useState(false);
+  const [directionsListExpanded, setDirectionsListExpanded] = useState(false);
 
   useEffect(() => {
     if (!view) {
@@ -38,8 +40,12 @@ export const AppUIProvider: React.FC<Props> = ({ children }) => {
       setRouteMinimized,
       mapPopupOpen,
       setMapPopupOpen,
+      stopsListExpanded,
+      setStopsListExpanded,
+      directionsListExpanded,
+      setDirectionsListExpanded,
     }),
-    [routeMinimized, setRouteMinimized, mapPopupOpen, setMapPopupOpen]
+    [routeMinimized, mapPopupOpen, stopsListExpanded, directionsListExpanded]
   );
 
   return (

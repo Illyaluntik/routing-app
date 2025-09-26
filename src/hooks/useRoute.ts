@@ -1,3 +1,4 @@
+import { MAX_STOPS } from '@/constants';
 import { useStopMarkers } from '@/hooks/useStopMarkers';
 import { useTravelModes } from '@/hooks/useTravelModes';
 import { createPointGraphic } from '@/misc/createPointGraphic';
@@ -39,8 +40,6 @@ export interface InitialRoutePoint {
   coords: [number, number];
   label: string;
 }
-
-export const MAX_STOPS = 20;
 
 export const useRoute = (
   view: MapView | null,

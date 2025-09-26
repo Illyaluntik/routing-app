@@ -1,8 +1,9 @@
 import { Button } from '@/components/ui/button';
+import { XButton } from '@/components/XButton';
 import { useMapPopupContext } from '@/providers/MapPopupContext/mapPopupContext';
 import { useMapViewContext } from '@/providers/MapViewContext/mapViewContext';
 import { useRouteContext } from '@/providers/RouteContext/routeContext';
-import { MapPinPlusInside, X } from 'lucide-react';
+import { MapPinPlusInside } from 'lucide-react';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -34,16 +35,12 @@ export const MapPopupWidget = () => {
 
   return createPortal(
     <>
-      <Button
-        className="absolute top-0 right-0 cursor-pointer"
-        size="icon"
-        variant="ghost"
+      <XButton
         onClick={() => {
           closePopup();
         }}
-      >
-        <X />
-      </Button>
+        className="absolute top-0 right-0 z-50"
+      />
       <div className="mb-1 text-xl font-semibold pr-5">{popupState.label}</div>
       <div className="text-xs text-gray-400 mb-5">
         {popupState.coords[1].toFixed(5)}, {popupState.coords[0].toFixed(5)}

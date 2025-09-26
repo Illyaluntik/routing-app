@@ -5,6 +5,10 @@ export interface AppUIContextValue {
   setMapPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   routeMinimized: boolean;
   setRouteMinimized: React.Dispatch<React.SetStateAction<boolean>>;
+  stopsListExpanded: boolean;
+  setStopsListExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  directionsListExpanded: boolean;
+  setDirectionsListExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AppUIContext = createContext<AppUIContextValue>(

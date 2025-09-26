@@ -21,6 +21,7 @@ export const BasemapWidget: React.FC<Props> = ({ className }) => {
     }
     view.map.basemap = id;
     setActive(id);
+    setIsOpen(false);
   };
 
   const handleMouseEnter = () => {
@@ -73,7 +74,7 @@ export const BasemapWidget: React.FC<Props> = ({ className }) => {
                 alt={bm.label}
                 className="w-full h-12 object-cover"
               />
-              <span className="text-xs py-1">{bm.label}</span>
+              <span className="text-[10px] sm:text-xs py-1">{bm.label}</span>
             </button>
           ))}
         </div>
